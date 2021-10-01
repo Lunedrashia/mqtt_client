@@ -20,9 +20,10 @@ data = {
     "timestamp":'CURRENT_TIME'
     }
 
-send_new_data("1",
-              "mqtt",
-              "password",
-              data,
-              "homeIsolation"
-              )
+if __name__ == "__main__":
+    send_new_data("1",
+                "mqtt",
+                "password",
+                data,
+                "homeIsolation"
+                )
