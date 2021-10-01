@@ -14,9 +14,9 @@ def send_new_data(client_id, token, secret, data, topic):
     client.publish(topic, payload=payload)
     client.disconnect()
 
-def pack_and_send(temp, oxy, hr, error_log):
+def pack_and_send(user_id, temp, oxy, hr, error_log):
     try:
-        print(temp.get(), oxy.get(), hr.get())
+        print(user_id.get(), temp.get(), oxy.get(), hr.get())
         data = {
             "temperature": temp.get(),
             'o2': oxy.get(),
@@ -24,12 +24,9 @@ def pack_and_send(temp, oxy, hr, error_log):
             "timestamp":'CURRENT_TIME'
             }
         error_log["text"] = "Success"
-        send_new_data("1", "mqtt", "password", data, "homeIsolation")
+        send_new_data(str(user_id.get()), "mqtt", "password", data, "homeIsolation")
     except tk.TclError:
         error_log["text"] = "Error"
-
-def generate_data(temp, oxy, hr, error_log):
-    pass
 
 PADDING_SIZE = 5
 
@@ -59,8 +56,7 @@ if __name__ == "__main__":
     rightmaster = tk.Frame(app)
     rightmaster.pack(side=tk.RIGHT, expand=True, padx=(0, PADDING_SIZE))
     error_log = tk.Label(rightmaster)
-    tk.Button(rightmaster, text='Generate data', command=lambda: generate_data(temp_val, oxy_val, hr_val, error_log)).pack(fill=tk.BOTH, expand=True)
-    tk.Button(rightmaster, text='Send data', command=lambda: pack_and_send(temp_val, oxy_val, hr_val, error_log)).pack(fill=tk.BOTH, expand=True)
+    tk.Button(rightmaster, text='Send data', command=lambda: pack_and_send(user_id_val, temp_val, oxy_val, hr_val, error_log)).pack(fill=tk.BOTH, expand=True)
     error_log.pack(side=tk.BOTTOM)
     
     app.resizable(width=False, height=False)
